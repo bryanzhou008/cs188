@@ -195,6 +195,7 @@ def train(args, train_dataset, model, tokenizer):
         epoch_iterator = tqdm(train_dataloader, desc="Iteration",
                               disable=args.local_rank not in [-1, 0])
         for step, batch in enumerate(epoch_iterator):
+            print(batch)
             # Skip past any already trained steps if resuming training
             if steps_trained_in_current_epoch > 0:
                 steps_trained_in_current_epoch -= 1
@@ -450,10 +451,17 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # the following metrics: accuracy, precision, recall and F1-score.
             # Please also make your sci-kit learn scores able to take the
             # `args.score_average_method` for the `average` argument.
-            raise NotImplementedError("Please finish the TODO!")
+
+            eval_prec = precision_score(input["label"], preds, average = args.score_average_method)
+            eval_acc = accuracy_score(input["label"], preds, average = args.score_average_method)
+            eval_recall = recall_score(input["label"], preds, average = args.score_average_method)
+            eval_f1 = f1_score(input["label"], preds, average = args.score_average_method)
+
+            # raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
             if args.task_name == "com2sense":
-                raise NotImplementedError("Please finish the TODO!")
+                eval_pairwise_acc = pairwise_accuracy(input["label"], preds)
+                # raise NotImplementedError("Please finish the TODO!")
 
         # End of TODO.
         ##################################################
@@ -621,10 +629,15 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    raise NotImplementedError("Please finish the TODO!")
+    # config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+    config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
+
+
 
     # TODO: Tokenizer.
-    raise NotImplementedError("Please finish the TODO!")
+    # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
+    tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
+
 
     # TODO: Defines the model. We use the MLM model when 
     # `training_phase` is `pretrain` otherwise we use the
@@ -636,7 +649,8 @@ def main():
             config=config,
         )
     else:
-        raise NotImplementedError("Please finish the TODO!")
+        # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+        model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
     # End of TODO.
     ##################################################

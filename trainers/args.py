@@ -8,6 +8,7 @@ def get_args():
     parser.add_argument(
         "--model_name_or_path",
         default=None,
+        # default = "yangheng/deberta-v3-base-absa-v1.1",
         type=str,
         required=True,
         help=("Path to pretrained model or model identifier from "

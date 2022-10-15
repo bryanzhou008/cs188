@@ -51,7 +51,44 @@ class SemEvalDataProcessor(DataProcessor):
         #      examples.append(example_2)
         # For the guid, simply use the row number (0-
         # indexed) for each data instance.
-        raise NotImplementedError("Please finish the TODO!")
+        dataset = pd.read_csv(data_dir)
+        examples = []
+        for i in range(len(dataset)):
+            data = dataset[i]
+            guid = str(i)
+            correct_statement = data['Correct Statement']
+            incorrect_statement = data['Incorrect Statement']
+            right_reason1 = data['Right Reason1']
+            right_reason2 = data['Right Reason2']
+            right_reason3 = data['Right Reason3']
+            confusing_reason1 = data['Confusing Reason1']
+            confusing_reason2 = data['Confusing Reason2']
+
+            example_1 = SemEvalSingleSentenceExample(
+                guid = guid,
+                text = correct_statement,
+                label = 1,
+                right_reason1 = right_reason1,
+                right_reason2 = right_reason2,
+                right_reason3 = right_reason3,
+                confusing_reason1 = confusing_reason1,
+                confusing_reason2 = confusing_reason2
+            )
+            examples.append(example_1)
+
+            example_2 = SemEvalSingleSentenceExample(
+                guid = guid,
+                text = incorrect_statement,
+                label = 0,
+                right_reason1 = right_reason1,
+                right_reason2 = right_reason2,
+                right_reason3 = right_reason3,
+                confusing_reason1 = confusing_reason1,
+                confusing_reason2 = confusing_reason2
+            )
+            examples.append(example_2)
+
+
         # End of TODO.
         ##################################################
 
