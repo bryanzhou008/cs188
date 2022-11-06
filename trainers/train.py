@@ -449,8 +449,11 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             break
 
     # Organize the predictions.
+    print("preds1: ", preds)
     preds = np.reshape(preds, (-1, preds.shape[-1]))
+    print("preds2: ", preds)
     preds = np.argmax(preds, axis=-1)
+    print("preds3: ", preds)
 
     if has_label or args.training_phase == "pretrain":
         # Computes overall average eavl loss.
@@ -478,6 +481,9 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # the following metrics: accuracy, precision, recall and F1-score.
             # Please also make your sci-kit learn scores able to take the
             # `args.score_average_method` for the `average` argument.
+
+            print("labels: ", labels)
+            print("preds: ", preds)
 
             eval_prec = precision_score(labels, preds, average = args.score_average_method)
             eval_acc = accuracy_score(labels, preds, average = args.score_average_method)
