@@ -494,7 +494,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
             if args.task_name == "com2sense":
-                eval_pairwise_acc = pairwise_accuracy(labels, preds)
+                eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
                 # raise NotImplementedError("Please finish the TODO!")
 
         # End of TODO.
