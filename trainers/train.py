@@ -397,7 +397,6 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                     inputs["input_ids"], tokenizer, args)
                 inputs["input_ids"] = masked_inputs
                 inputs["labels"] = lm_labels
-            print("inputs: ", inputs)
             ##################################################
             # TODO: Please finish the following eval loop.
             if args.training_phase == "pretrain":
@@ -423,12 +422,10 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                 eval_loss = eval_loss.mean()
 
             logits = output.logits
-            print("logits before softmax, ", logits)
 
             # TODO: Handles the logits with Softmax properly.
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
-            print(logits)
             # End of TODO.
             ##################################################
 
@@ -450,11 +447,8 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             break
 
     # Organize the predictions.
-    print("preds1: ", preds)
     preds = np.reshape(preds, (-1, preds.shape[-1]))
-    print("preds2: ", preds)
     preds = np.argmax(preds, axis=-1)
-    print("preds3: ", preds)
 
     if has_label or args.training_phase == "pretrain":
         # Computes overall average eavl loss.
