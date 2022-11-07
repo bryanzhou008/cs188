@@ -663,15 +663,13 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    config = AutoConfig.from_pretrained(args.model_name_or_path)    # for bert
-    # config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+    config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
     # config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
 
 
 
     # TODO: Tokenizer.
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)  # for bert
-    # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
+    tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
     # tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
 
@@ -685,8 +683,7 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(args.model_name_or_path)    # for bert
-        # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+        model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
         # model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
     # End of TODO.
