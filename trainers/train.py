@@ -397,7 +397,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                     inputs["input_ids"], tokenizer, args)
                 inputs["input_ids"] = masked_inputs
                 inputs["labels"] = lm_labels
-
+            print("inputs: ", inputs)
             ##################################################
             # TODO: Please finish the following eval loop.
             if args.training_phase == "pretrain":
@@ -423,11 +423,12 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                 eval_loss = eval_loss.mean()
 
             logits = output.logits
+            print("logits before softmax, ", logits)
 
             # TODO: Handles the logits with Softmax properly.
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
-
+            print(logits)
             # End of TODO.
             ##################################################
 
@@ -486,7 +487,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             print("preds: ", preds)
 
             eval_prec = precision_score(labels, preds, average = args.score_average_method)
-            eval_acc = accuracy_score(labels, preds, average = args.score_average_method)
+            eval_acc = accuracy_score(labels, preds)
             eval_recall = recall_score(labels, preds, average = args.score_average_method)
             eval_f1 = f1_score(labels, preds, average = args.score_average_method)
 
@@ -662,14 +663,14 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    # config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
-    config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
+    config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+    # config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
 
 
 
     # TODO: Tokenizer.
-    # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
-    tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
+    tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
+    # tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
 
     # TODO: Defines the model. We use the MLM model when 
@@ -682,8 +683,8 @@ def main():
             config=config,
         )
     else:
-        # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
-        model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
+        model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+        # model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
     # End of TODO.
     ##################################################
