@@ -195,7 +195,6 @@ class Com2SenseDataset(Dataset):
         # the outputs of tokenizer for certain types of
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
-        # raise NotImplementedError("Please finish the TODO!")
 
         example = self.examples[idx]
         guid = example.guid

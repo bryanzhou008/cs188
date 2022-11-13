@@ -61,7 +61,6 @@ class Com2SenseDataProcessor(DataProcessor):
         # coming from the same complementary pair.
         # Make sure to handle if data do not have
         # labels field.
-        # raise NotImplementedError("Please finish the TODO!")
 
         json_path = os.path.join(data_dir, split+".json")
         data = json.load(open(json_path, "r"))

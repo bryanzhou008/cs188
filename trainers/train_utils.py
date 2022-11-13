@@ -40,7 +40,6 @@ def pairwise_accuracy(guids, preds, labels):
 
     accs = pair_acc.values()
     acc = sum(accs) / len(accs)
-    # raise NotImplementedError("Please finish the TODO!")
     # End of TODO
     ########################################################
      
