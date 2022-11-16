@@ -22,7 +22,7 @@ python3 -m trainers.train \
   --logging_steps 10 \
   --warmup_steps 100 \
   --eval_split "dev" \
-  --score_average_method "micro" \
+  --score_average_method "macro" \
   --iters_to_eval 20 40 \
   --overwrite_output_dir \
   --eval_split "dev" \
