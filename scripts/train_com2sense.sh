@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="facebook/bart-large-mnli"
+MODEL_TYPE="bert-large-cased-whole-word-masking"
 
 
 python3 -m trainers.train \
