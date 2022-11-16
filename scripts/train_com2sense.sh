@@ -11,8 +11,9 @@ python3 -m trainers.train \
   --evaluate_during_training \
   --per_gpu_train_batch_size 16 \
   --per_gpu_eval_batch_size 1 \
+  --gradient_accumulation_steps 4 \
   --learning_rate 5e-6 \
-  --num_train_epochs 50.0 \
+  --max_steps 2000 \
   --max_seq_length 128 \
   --output_dir "${TASK_NAME}/ckpts" \
   --task_name "${TASK_NAME}" \
@@ -22,7 +23,7 @@ python3 -m trainers.train \
   --logging_steps 10 \
   --warmup_steps 100 \
   --eval_split "dev" \
-  --score_average_method "macro" \
+  --score_average_method "binary" \
   --iters_to_eval 20 40 \
   --overwrite_output_dir \
   --eval_split "dev" \
