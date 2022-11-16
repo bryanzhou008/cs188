@@ -417,11 +417,10 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
             loss = output.loss.mean()
-            logits = output.logits
-
             eval_loss += loss
 
             # TODO: Handles the logits with Softmax properly.
+            logits = output.logits
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
             # End of TODO.
@@ -475,7 +474,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # Please also make your sci-kit learn scores able to take the
             # `args.score_average_method` for the `average` argument.
 
-            print("labels: ", labels)
+            # print("labels: ", labels)
             print("preds: ", preds)
 
             eval_prec = precision_score(labels, preds, average = args.score_average_method)
@@ -677,12 +676,12 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(
-            args.model_name_or_path,
-            from_tf=bool(".ckpt" in args.model_name_or_path),
-            config=config,
-        )
-
+        # model = AutoModelForSequenceClassification.from_pretrained(
+        #     args.model_name_or_path,
+        #     from_tf=bool(".ckpt" in args.model_name_or_path),
+        #     config=config,
+        # )
+        model = AutoModelForSequenceClassification.from_config(config=config)
     # End of TODO.
     ##################################################
 
