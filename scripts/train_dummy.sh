@@ -1,6 +1,6 @@
 TASK_NAME="dummy"
 DATA_DIR="datasets/dummies"
-MODEL_TYPE="bert-base-cased"
+MODEL_TYPE="textattack/bert-base-uncased-yelp-polarity"
 
 
 python3 -m trainers.train \

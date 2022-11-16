@@ -416,12 +416,10 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # indexing properly the outputs as tuples.
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
-            eval_loss = output.loss
-
-            if args.n_gpu > 1:
-                eval_loss = eval_loss.mean()
-
+            loss = output.loss.mean()
             logits = output.logits
+
+            eval_loss += loss
 
             # TODO: Handles the logits with Softmax properly.
             softmax = torch.nn.Softmax(dim=1)
@@ -657,13 +655,15 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+    config = AutoConfig.from_pretrained(args.model_name_or_path)    # for bert
+    # config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
     # config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
 
 
 
     # TODO: Tokenizer.
-    tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)  # for bert
+    # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
     # tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
 
@@ -677,7 +677,8 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
+        model = AutoModelForSequenceClassification.from_pretrained(args.model_name_or_path)    # for bert
+        # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
         # model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
 
     # End of TODO.
