@@ -9,9 +9,9 @@ python3 -m trainers.train \
   --do_train \
   --do_eval \
   --evaluate_during_training \
-  --per_gpu_train_batch_size 4 \
+  --per_gpu_train_batch_size 8 \
   --per_gpu_eval_batch_size 1 \
-  --learning_rate 5e-6 \
+  --learning_rate 4e-6 \
   --num_train_epochs 100.0 \
   --max_seq_length 128 \
   --output_dir "${TASK_NAME}/ckpts" \
