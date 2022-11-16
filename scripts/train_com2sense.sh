@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="microsoft/deberta-v3-base"
+MODEL_TYPE="microsoft/deberta-base"
 
 
 python3 -m trainers.train \
