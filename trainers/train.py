@@ -678,12 +678,12 @@ def main():
             config=config,
         )
     else:
-        # model = AutoModelForSequenceClassification.from_pretrained(
-        #     args.model_name_or_path,
-        #     from_tf=bool(".ckpt" in args.model_name_or_path),
-        #     config=config,
-        # )
-        model = AutoModelForSequenceClassification.from_config(config=config)
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
+        # model = AutoModelForSequenceClassification.from_config(config=config)
     # End of TODO.
     ##################################################
 
