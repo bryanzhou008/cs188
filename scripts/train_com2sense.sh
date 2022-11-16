@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="textattack/bert-base-uncased-yelp-polarity"
+MODEL_TYPE="microsoft/deberta-v3-base"
 
 
 python3 -m trainers.train \
@@ -11,7 +11,7 @@ python3 -m trainers.train \
   --evaluate_during_training \
   --per_gpu_train_batch_size 4 \
   --per_gpu_eval_batch_size 1 \
-  --learning_rate 1e-7 \
+  --learning_rate 1e-4 \
   --num_train_epochs 100.0 \
   --max_seq_length 128 \
   --output_dir "${TASK_NAME}/ckpts" \
