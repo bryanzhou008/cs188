@@ -416,11 +416,12 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # indexing properly the outputs as tuples.
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
-            loss = output.loss.mean()
-            eval_loss += loss
+            # loss = output.loss.mean()
+            loss, logits = output[:2]
+            eval_loss += loss.mean()
 
             # TODO: Handles the logits with Softmax properly.
-            logits = output.logits
+            # logits = output.logits
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
             # End of TODO.
