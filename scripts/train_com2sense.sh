@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="facebook/bart-base"
+MODEL_TYPE="facebook/bart-large-mnli"
 
 
 python3 -m trainers.train \
