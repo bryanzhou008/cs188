@@ -55,7 +55,7 @@ except ImportError:
     from tensorboardX import SummaryWriter
 
 # Accuracy metrics.
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, precision_recall_fscore_support
 
 # Loggers.
 logger = logging.getLogger(__name__)
@@ -448,7 +448,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
     preds = np.argmax(preds, axis=-1)
 
     if has_label or args.training_phase == "pretrain":
-        # Computes overall average eavl loss.
+        # Computes overall average eval loss.
         eval_loss = eval_loss / nb_eval_steps
 
         eval_loss_dict = {"{}_loss".format(args.task_name): eval_loss}
@@ -477,10 +477,12 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # print("labels: ", labels)
             print("preds: ", preds)
 
-            eval_prec = precision_score(labels, preds, average = args.score_average_method)
+            eval_prec, eval_recall, eval_f1, _ = precision_recall_fscore_support(labels, preds, average = args.score_average_method)
             eval_acc = accuracy_score(labels, preds)
-            eval_recall = recall_score(labels, preds, average = args.score_average_method)
-            eval_f1 = f1_score(labels, preds, average = args.score_average_method)
+            # eval_prec = precision_score(labels, preds, average = args.score_average_method)
+            # eval_acc = accuracy_score(labels, preds)
+            # eval_recall = recall_score(labels, preds, average = args.score_average_method)
+            # eval_f1 = f1_score(labels, preds, average = args.score_average_method)
 
             # raise NotImplementedError("Please finish the TODO!")
             # TODO: Pairwise accuracy.
