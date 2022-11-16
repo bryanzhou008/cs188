@@ -677,9 +677,11 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(args.model_name_or_path)    # for bert
-        # model = AutoModelForSequenceClassification.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
-        # model = AutoModelForSequenceClassification.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
+        model = AutoModelForSequenceClassification.from_pretrained(
+            args.model_name_or_path,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
+        )
 
     # End of TODO.
     ##################################################
