@@ -55,7 +55,7 @@ except ImportError:
     from tensorboardX import SummaryWriter
 
 # Accuracy metrics.
-from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import precision_score, recall_score, f1_score, accuracy_score
 
 # Loggers.
 logger = logging.getLogger(__name__)
@@ -65,6 +65,9 @@ def set_seed(args):
     random.seed(args.seed)
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
+
+    print("ngpus:", args.n_gpu)
+
     if args.n_gpu > 0:
         torch.cuda.manual_seed_all(args.seed)
 
@@ -195,7 +198,6 @@ def train(args, train_dataset, model, tokenizer):
         epoch_iterator = tqdm(train_dataloader, desc="Iteration",
                               disable=args.local_rank not in [-1, 0])
         for step, batch in enumerate(epoch_iterator):
-            # print(batch)
             # Skip past any already trained steps if resuming training
             if steps_trained_in_current_epoch > 0:
                 steps_trained_in_current_epoch -= 1
@@ -224,10 +226,6 @@ def train(args, train_dataset, model, tokenizer):
 
             ##################################################
             # TODO: Please finish the following training loop.
-
-            # TODO: See the HuggingFace transformers doc to properly get
-            # the loss from the model outputs.
-
             if args.training_phase == "pretrain":
                 output = model(
                     input_ids=inputs['input_ids'],
@@ -239,6 +237,9 @@ def train(args, train_dataset, model, tokenizer):
                     attention_mask=inputs['attention_mask'],
                     labels=inputs['labels']
                 )
+
+            # TODO: See the HuggingFace transformers doc to properly get
+            # the loss from the model outputs.
             loss = output.loss
 
             if args.n_gpu > 1:
@@ -397,6 +398,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                     inputs["input_ids"], tokenizer, args)
                 inputs["input_ids"] = masked_inputs
                 inputs["labels"] = lm_labels
+
             ##################################################
             # TODO: Please finish the following eval loop.
             if args.training_phase == "pretrain":
@@ -416,14 +418,16 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # indexing properly the outputs as tuples.
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
-            # loss = output.loss.mean()
-            loss, logits = output[:2]
+            loss = output.loss
+            logits = output.logits
+            
             eval_loss += loss.mean()
 
             # TODO: Handles the logits with Softmax properly.
             # logits = output.logits
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
+
             # End of TODO.
             ##################################################
 
@@ -474,22 +478,13 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # the following metrics: accuracy, precision, recall and F1-score.
             # Please also make your sci-kit learn scores able to take the
             # `args.score_average_method` for the `average` argument.
-
-            # print("labels: ", labels)
-            print("preds: ", preds)
-
-            eval_prec, eval_recall, eval_f1, _ = precision_recall_fscore_support(labels, preds, average = args.score_average_method)
+            eval_prec = precision_score(labels, preds, average = args.score_average_method)
             eval_acc = accuracy_score(labels, preds)
-            # eval_prec = precision_score(labels, preds, average = args.score_average_method)
-            # eval_acc = accuracy_score(labels, preds)
-            # eval_recall = recall_score(labels, preds, average = args.score_average_method)
-            # eval_f1 = f1_score(labels, preds, average = args.score_average_method)
-
-            # raise NotImplementedError("Please finish the TODO!")
+            eval_recall = recall_score(labels, preds, average = args.score_average_method)
+            eval_f1 = f1_score(labels, preds, average = args.score_average_method)
             # TODO: Pairwise accuracy.
             if args.task_name == "com2sense":
                 eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
-                # raise NotImplementedError("Please finish the TODO!")
 
         # End of TODO.
         ##################################################
@@ -657,17 +652,10 @@ def main():
     # for essential args.
 
     # TODO: Huggingface configs.
-    config = AutoConfig.from_pretrained(args.model_name_or_path)    # for bert
-    # config = AutoConfig.from_pretrained("textattack/bert-base-uncased-yelp-polarity")    # for bert
-    # config = AutoConfig.from_pretrained("yangheng/deberta-v3-base-absa-v1.1")   # for deberta
-
-
+    config = AutoConfig.from_pretrained(args.model_name_or_path)
 
     # TODO: Tokenizer.
-    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)  # for bert
-    # tokenizer = AutoTokenizer.from_pretrained("textattack/bert-base-uncased-yelp-polarity")  # for bert
-    # tokenizer = AutoTokenizer.from_pretrained("yangheng/deberta-v3-base-absa-v1.1") # for deberta
-
+    tokenizer = AutoTokenizer.from_pretrained(args.model_name_or_path)
 
     # TODO: Defines the model. We use the MLM model when 
     # `training_phase` is `pretrain` otherwise we use the
@@ -681,10 +669,10 @@ def main():
     else:
         model = AutoModelForSequenceClassification.from_pretrained(
             args.model_name_or_path,
-            # from_tf=bool(".ckpt" in args.model_name_or_path),
-            # config=config,
+            from_tf=bool(".ckpt" in args.model_name_or_path),
+            config=config,
         )
-        # model = AutoModelForSequenceClassification.from_config(config=config)
+
     # End of TODO.
     ##################################################
 
