@@ -20,10 +20,10 @@ python3 -m trainers.train \
   --output_dir "${TASK_NAME}/${SUBDIR}" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
-  --overwrite_output_dir \
   --save_steps 200 \
   --logging_steps 20 \
   --warmup_steps 100 \
-  --eval_split "dev" \
   --score_average_method "binary" \
   --eval_all_checkpoints
+  --eval_split "dev" \
+  --overwrite_output_dir \

@@ -667,8 +667,8 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForMaskedLM.from_pretrained(
-        # model = AutoModelForSequenceClassification.from_pretrained( 
+        # model = AutoModelForMaskedLM.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained( 
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
             config=config,
