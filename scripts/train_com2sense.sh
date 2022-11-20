@@ -1,10 +1,9 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
 
-# https://arxiv.org/pdf/1907.11692.pdf
-MODEL_TYPE="roberta-base" 
-SUBDIR="robertabase"  
-
+# https://huggingface.co/deepset/roberta-base-squad2
+MODEL_TYPE="deepset/roberta-base-squad2" 
+SUBDIR="robertasquad"  
 python3 -m trainers.train \
   --model_name_or_path ${MODEL_TYPE} \
   --do_train \
