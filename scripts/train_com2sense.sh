@@ -2,12 +2,12 @@ TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
 
 # https://arxiv.org/pdf/1810.04805.pdf
-MODEL_TYPE="bert-large-cased-whole-word-masking" 
-SUBDIR="wholeword"
+# MODEL_TYPE="bert-large-cased-whole-word-masking" 
+# SUBDIR="wholeword"
 
 # https://arxiv.org/pdf/2209.14557.pdf
-# MODEL_TYPE="mediabiasgroup/DA-RoBERTa-BABE" 
-# SUBDIR="mediabias"  
+MODEL_TYPE="mediabiasgroup/DA-RoBERTa-BABE" 
+SUBDIR="mediabias"  
 
 
 python3 -m trainers.train \
@@ -21,7 +21,6 @@ python3 -m trainers.train \
   --num_train_epochs 4 \
   --learning_rate 5e-5 \
   --max_seq_length 128 \
-  --weight_decay 0.01 \
   --output_dir "${TASK_NAME}/${SUBDIR}" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
