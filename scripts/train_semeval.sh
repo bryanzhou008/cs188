@@ -1,7 +1,7 @@
 TASK_NAME="semeval"
 DATA_DIR="datasets/semeval_2020_task4"
-MODEL_TYPE="microsoft/deberta-v3-large"
-SUBDIR="debertav3large"
+MODEL_TYPE="roberta-base" 
+SUBDIR="robertabase"
 python3 -m trainers.train \
   --model_name_or_path ${MODEL_TYPE} \
   --do_train \
