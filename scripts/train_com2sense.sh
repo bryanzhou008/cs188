@@ -8,9 +8,9 @@ python3 -m trainers.train \
   --do_train \
   --do_eval \
   --evaluate_during_training \
-  --per_gpu_train_batch_size 8 \
+  --per_gpu_train_batch_size 4 \
   --per_gpu_eval_batch_size 1 \
-  --gradient_accumulation_steps 4 \
+  --gradient_accumulation_steps 8 \
   --learning_rate 9e-6 \
   --adam_epsilon 1e-6 \
   --max_steps 1600 \
