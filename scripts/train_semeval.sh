@@ -1,28 +1,25 @@
 TASK_NAME="semeval"
 DATA_DIR="datasets/semeval_2020_task4"
-MODEL_TYPE="bert-base-cased"
-
-
+MODEL_TYPE="microsoft/deberta-v3-large"
+SUBDIR="debertav3large"
 python3 -m trainers.train \
   --model_name_or_path ${MODEL_TYPE} \
-  --do_not_load_optimizer \
   --do_train \
   --do_eval \
   --evaluate_during_training \
-  --per_gpu_train_batch_size 4 \
+  --per_gpu_train_batch_size 16 \
   --per_gpu_eval_batch_size 1 \
-  --learning_rate 1e-5 \
-  --num_train_epochs 100.0 \
+  --gradient_accumulation_steps 4 \
+  --max_steps 2000 \
+  --learning_rate 5e-5 \
   --max_seq_length 128 \
-  --output_dir "${TASK_NAME}/ckpts" \
+  --weight_decay 0.01 \
+  --output_dir "${TASK_NAME}/${SUBDIR}" \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --overwrite_output_dir \
-  --save_steps 20 \
-  --logging_steps 5 \
-  --warmup_steps 100 \
+  --save_steps 200 \
+  --logging_steps 40 \
   --eval_split "dev" \
   --score_average_method "binary" \
-  --iters_to_eval 20 40 \
-  --overwrite_output_dir \
-  # --max_eval_steps 1000 \
+  --eval_all_checkpoints
