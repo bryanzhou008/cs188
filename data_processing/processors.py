@@ -137,7 +137,34 @@ class SemEvalDataset(Dataset):
         # the outputs of tokenizer for certain types of
         # models (e.g. RoBERTa), please take special care
         # of it with an if-else statement.
-        raise NotImplementedError("Please finish the TODO!")
+
+
+        example = self.examples[idx]
+        guid = example.guid
+        text = example.text
+        label = example.label
+        right_reason1 = example.right_reason1
+        right_reason2 = example.right_reason2
+        right_reason3 = example.right_reason3
+        confusing_reason1 = example.confusing_reason1
+        confusing_reason2 = example.confusing_reason2
+
+        batch_encoding = self.tokenizer(
+            text,
+            add_special_tokens=True,
+            max_length=self.max_seq_length,
+            padding="max_length",
+            truncation=True,
+        )
+
+        input_ids = torch.Tensor(batch_encoding["input_ids"]).long()
+        attention_mask = torch.Tensor(batch_encoding["attention_mask"]).long()
+        if "token_type_ids" not in batch_encoding:
+            token_type_ids = torch.zeros_like(input_ids)
+        else:
+            token_type_ids = torch.Tensor(batch_encoding["token_type_ids"]).long()
+
+        labels = torch.Tensor().long()
         # End of TODO.
         ##################################################
 
@@ -249,12 +276,12 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
 
     # processor = DummyDataProcessor(data_dir="datasets/dummies", args=args)
-    processor = Com2SenseDataProcessor(data_dir="datasets/com2sense", args=args)
-    examples = processor.get_test_examples()
+    # processor = Com2SenseDataProcessor(data_dir="datasets/com2sense", args=args)
+    # examples = processor.get_test_examples()
 
-    dataset = Com2SenseDataset(examples, tokenizer,
-                           max_seq_length=args.max_seq_length,
-                           args=args)
+    # dataset = Com2SenseDataset(examples, tokenizer,
+    #                        max_seq_length=args.max_seq_length,
+    #                        args=args)
     sampler = SequentialSampler(dataset)
     dataloader = DataLoader(dataset, sampler=sampler, batch_size=2)
     epoch_iterator = tqdm(dataloader, desc="Iteration")

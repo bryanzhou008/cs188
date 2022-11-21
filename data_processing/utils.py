@@ -8,6 +8,7 @@ from typing import List, Optional, Union
 
 import tqdm
 
+import dataclasses
 from dataclasses import dataclass
 
 

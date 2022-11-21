@@ -51,12 +51,16 @@ class SemEvalDataProcessor(DataProcessor):
         #      examples.append(example_2)
         # For the guid, simply use the row number (0-
         # indexed) for each data instance.
-        dataset = pd.read_csv(data_dir)
+        df = pd.read_csv(data_dir + "/" + split + ".csv")
+        # print(len(df))
+        # return
         examples = []
-        for i in range(len(dataset)):
-            data = dataset[i]
+        for i in range(len(df)):
+            data = df.iloc[i]
+            # data = dataset[i]
             guid = str(i)
             correct_statement = data['Correct Statement']
+            # print("###",correct_statement)
             incorrect_statement = data['Incorrect Statement']
             right_reason1 = data['Right Reason1']
             right_reason2 = data['Right Reason2']
@@ -75,6 +79,7 @@ class SemEvalDataProcessor(DataProcessor):
                 confusing_reason2 = confusing_reason2
             )
             examples.append(example_1)
+            # print(example_1.to_json_string())
 
             example_2 = SemEvalSingleSentenceExample(
                 guid = guid,

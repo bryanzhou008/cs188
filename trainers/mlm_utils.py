@@ -51,21 +51,27 @@ def mask_tokens(inputs, tokenizer, args, special_tokens_mask=None):
     # function `masked_fill_`, and `torch.bernoulli`.
     # Check the inputs to the bernoulli function and use other hinted functions
     # to construct such inputs.
-    raise NotImplementedError("Please finish the TODO!")
+    # raise NotImplementedError("Please finish the TODO!")
+
+    # prob = torch.full(input.size, args.mlm_probability) 
+    # mask = torch.bernoulli(prob) 
+    # torch.Tensor.masked_fill_(mask, [mask_token]) 
 
     # Remember that the "non-masked" parts should be filled with ignore index.
-    raise NotImplementedError("Please finish the TODO!")
+    # raise NotImplementedError("Please finish the TODO!")
+
+    # torch.Tensor.masked_fill_(!mask, [ignore_index]) 
 
     # For 80% of the time, we will replace masked input tokens with  the
     # tokenizer.mask_token (e.g. for BERT it is [MASK] for for RoBERTa it is
     # <mask>, check tokenizer documentation for more details)
-    raise NotImplementedError("Please finish the TODO!")
+    # raise NotImplementedError("Please finish the TODO!")
 
     # For 10% of the time, we replace masked input tokens with random word.
     # Hint: you may find function `torch.randint` handy.
     # Hint: make sure that the random word replaced positions are not overlapping
     # with those of the masked positions, i.e. "~indices_replaced".
-    raise NotImplementedError("Please finish the TODO!")
+    # raise NotImplementedError("Please finish the TODO!")
 
     # End of TODO
     ##################################################
