@@ -7,12 +7,13 @@ python3 -m trainers.train \
   --do_train \
   --do_eval \
   --evaluate_during_training \
-  --per_gpu_train_batch_size 4 \
+  --per_gpu_train_batch_size 6 \
   --per_gpu_eval_batch_size 1 \
   --gradient_accumulation_steps 8 \
-  --max_steps 200 \
-  --learning_rate 1e-5 \
+  --max_steps 100 \
   --max_seq_length 128 \
+  --learning_rate 2e-5 \
+  --adam_epsilon 1e-6 \
   --weight_decay 0.01 \
   --output_dir "${TASK_NAME}/${SUBDIR}" \
   --task_name "${TASK_NAME}" \
