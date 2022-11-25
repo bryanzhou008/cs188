@@ -66,6 +66,8 @@ def set_seed(args):
     np.random.seed(args.seed)
     torch.manual_seed(args.seed)
 
+    print("ngpus:", args.n_gpu)
+
     if args.n_gpu > 0:
         torch.cuda.manual_seed_all(args.seed)
 
@@ -160,6 +162,7 @@ def train(args, train_dataset, model, tokenizer):
     global_step = 0
     epochs_trained = 0
     steps_trained_in_current_epoch = 0
+    max_pairwise_acc = 0
 
     # Check if continuing training from a checkpoint
     if (os.path.exists(args.model_name_or_path)
@@ -282,6 +285,30 @@ def train(args, train_dataset, model, tokenizer):
                             tb_writer.add_scalar(
                                 "eval_on_{}_{}".format(args.eval_split, key),
                                 value, global_step)
+                        if args.task_name == "com2sense":                            
+                            eval_pairwise_acc = results["{}_pairwise_accuracy".format(args.task_name)]
+                            if eval_pairwise_acc > max_pairwise_acc:
+                                max_pairwise_acc = eval_pairwise_acc
+                                output_dir = os.path.join(args.output_dir,
+                                    "checkpoint-best")
+                                if not os.path.exists(output_dir):
+                                    os.makedirs(output_dir)
+                                model_to_save = (
+                                    model.module if hasattr(model, "module") else model
+                                )  # Take care of distributed/parallel training
+                                model_to_save.save_pretrained(output_dir)
+                                tokenizer.save_pretrained(output_dir)
+
+                                torch.save(args, os.path.join(output_dir,
+                                        "training_args.bin"))
+                                logger.info("Saving model checkpoint to %s", output_dir)
+
+                                torch.save(optimizer.state_dict(), os.path.join(
+                                    output_dir, "optimizer.pt"))
+                                torch.save(scheduler.state_dict(), os.path.join(
+                                    output_dir, "scheduler.pt"))
+                                logger.info("Saving optimizer and scheduler states to %s",
+                                            output_dir)
                     tb_writer.add_scalar("lr", scheduler.get_lr()[0],
                                          global_step)
                     tb_writer.add_scalar("loss",
@@ -404,16 +431,11 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                     input_ids=inputs['input_ids'],
                     labels=inputs['labels']
                 )
-            elif args.eval_split != "test":
+            else:
                 output = model(
                     input_ids=inputs['input_ids'],
                     attention_mask=inputs['attention_mask'],
                     labels=inputs['labels']
-                )
-            else:
-                output = model(
-                    input_ids=inputs['input_ids'],
-                    attention_mask=inputs['attention_mask']
                 )
 
             # TODO: See the HuggingFace transformers doc to properly get the loss
@@ -421,13 +443,13 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # indexing properly the outputs as tuples.
             # Make sure to perform a `.mean()` on the eval loss and add it
             # to the `eval_loss` variable.
-            if args.eval_split != "test":
-                loss = output.loss.mean()
-                eval_loss += loss
-
+            loss = output.loss
             logits = output.logits
+            
+            eval_loss += loss.mean()
 
             # TODO: Handles the logits with Softmax properly.
+            # logits = output.logits
             softmax = torch.nn.Softmax(dim=1)
             logits = softmax(logits)
 
@@ -456,7 +478,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
     preds = np.argmax(preds, axis=-1)
 
     if has_label or args.training_phase == "pretrain":
-        # Computes overall average eavl loss.
+        # Computes overall average eval loss.
         eval_loss = eval_loss / nb_eval_steps
 
         eval_loss_dict = {"{}_loss".format(args.task_name): eval_loss}
@@ -670,7 +692,8 @@ def main():
             config=config,
         )
     else:
-        model = AutoModelForSequenceClassification.from_pretrained(
+        # model = AutoModelForMaskedLM.from_pretrained(
+        model = AutoModelForSequenceClassification.from_pretrained( 
             args.model_name_or_path,
             from_tf=bool(".ckpt" in args.model_name_or_path),
             config=config,
@@ -712,17 +735,9 @@ def main():
                 " of `iter_to_eval` or `eval_all_checkpoints` should be set.")
             checkpoints = []
             for iter_to_eval in args.iters_to_eval:
-                # print("args.iters_to_eval:", args.iters_to_eval)
-                # print(args.output_dir + "/*-{}/".format(iter_to_eval) + WEIGHTS_NAME)
-                # checkpoints_curr = list(
-                #     os.path.dirname(c) for c in sorted(glob.glob(
-                #         args.output_dir + "/*-{}/".format(iter_to_eval)
-                #         + WEIGHTS_NAME, recursive=True))
-                # )
-                # the original code has an extea *-, I don't know why
                 checkpoints_curr = list(
                     os.path.dirname(c) for c in sorted(glob.glob(
-                        args.output_dir + "/{}/".format(iter_to_eval)
+                        args.output_dir + "/*-{}/".format(iter_to_eval)
                         + WEIGHTS_NAME, recursive=True))
                 )
                 checkpoints += checkpoints_curr
