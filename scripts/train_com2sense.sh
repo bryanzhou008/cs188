@@ -1,9 +1,9 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="outputs/semeval/debertav3large/checkpoint-100" 
+# MODEL_TYPE="outputs/semeval/debertav3large/checkpoint-100" 
 SUBDIR="semevalckpt" 
 python3 -m trainers.train \
-  --model_name_or_path ${MODEL_TYPE} \
+  --model_name_or_path "outputs/${TASK_NAME}/${SUBDIR}/checkpoint-1000" \
   --do_train \
   --do_eval \
   --evaluate_during_training \
