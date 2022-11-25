@@ -142,7 +142,6 @@ class SemEvalDataset(Dataset):
         example = self.examples[idx]
         guid = example.guid
         text = example.text
-        label = example.label
         right_reason1 = example.right_reason1
         right_reason2 = example.right_reason2
         right_reason3 = example.right_reason3
@@ -177,7 +176,7 @@ class SemEvalDataset(Dataset):
                 return input_ids, attention_mask, token_type_ids, guid
             return input_ids, attention_mask, token_type_ids, labels, guid
 
-        return input_ids, attention_mask, token_type_ids, labels
+        return input_ids, attention_mask, token_type_ids, labels, guid
 
 
 class Com2SenseDataset(Dataset):
