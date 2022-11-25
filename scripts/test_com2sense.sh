@@ -4,7 +4,7 @@ SUBDIR="semevalckpt"
 
 
 python3 -m trainers.train
-  --model_name_or_path "${TASK_NAME}/${SUBDIR}/checkpoint-1000" \
+  --model_name_or_path "outputs/${TASK_NAME}/${SUBDIR}/checkpoint-1000" \
   --do_eval \
   --iters_to_eval checkpoint-2000 \
   --per_gpu_eval_batch_size 1 \
