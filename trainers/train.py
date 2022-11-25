@@ -285,7 +285,7 @@ def train(args, train_dataset, model, tokenizer):
                             tb_writer.add_scalar(
                                 "eval_on_{}_{}".format(args.eval_split, key),
                                 value, global_step)
-                        if args.task_name == "com2sense":                            
+                        if args.task_name == "com2sense" or args.task_name == "semeval":                            
                             eval_pairwise_acc = results["{}_pairwise_accuracy".format(args.task_name)]
                             if eval_pairwise_acc > max_pairwise_acc:
                                 max_pairwise_acc = eval_pairwise_acc
@@ -450,7 +450,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             # to the `eval_loss` variable.
             loss = output.loss
             logits = output.logits
-            
+
             if args.eval_split != "test":
                 eval_loss += loss.mean()
 
@@ -514,7 +514,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             eval_recall = recall_score(labels, preds, average = args.score_average_method)
             eval_f1 = f1_score(labels, preds, average = args.score_average_method)
             # TODO: Pairwise accuracy.
-            if args.task_name == "com2sense":
+            if args.task_name == "com2sense" or args.task_name == "semeval":
                 eval_pairwise_acc = pairwise_accuracy(guids, preds, labels)
 
         # End of TODO.
@@ -528,7 +528,7 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             eval_acc_dict["{}_recall".format(args.task_name)] = eval_recall
             eval_acc_dict["{}_F1_score".format(args.task_name)] = eval_f1
             # Pairwise accuracy.
-            if args.task_name == "com2sense":
+            if args.task_name == "com2sense" or args.task_name == "semeval":
                 eval_acc_dict["{}_pairwise_accuracy".format(args.task_name)] = eval_pairwise_acc
 
         results.update(eval_acc_dict)
