@@ -3,7 +3,7 @@ DATA_DIR="datasets/com2sense"
 SUBDIR="semevalckpt" 
 
 
-python3 -m trainers.train
+python3 -m trainers.train \
   --model_name_or_path "outputs/${TASK_NAME}/${SUBDIR}/checkpoint-1000" \
   --do_eval \
   --iters_to_eval checkpoint-2000 \
