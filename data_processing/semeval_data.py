@@ -58,7 +58,7 @@ class SemEvalDataProcessor(DataProcessor):
         for i in range(len(df)):
             data = df.iloc[i]
             # data = dataset[i]
-            guid = str(i)
+            guid = i
             correct_statement = data['Correct Statement']
             # print("###",correct_statement)
             incorrect_statement = data['Incorrect Statement']
@@ -120,6 +120,6 @@ if __name__ == "__main__":
     val_examples = proc.get_dev_examples()
     test_examples = proc.get_test_examples()
     print()
-    for i in range(3):
-        print(test_examples[i])
+    for i in range(8):
+        print(train_examples[i])
     print()
