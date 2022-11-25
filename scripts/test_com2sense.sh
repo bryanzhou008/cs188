@@ -13,4 +13,4 @@ python3 -m trainers.train \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --eval_split "test" \
-  --do_not_load_optimizer \
+  --do_not_load_optimizer
