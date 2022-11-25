@@ -19,7 +19,7 @@ python3 -m trainers.train \
   --task_name "${TASK_NAME}" \
   --data_dir "${DATA_DIR}" \
   --overwrite_output_dir \
-  --save_steps 400 \
+  --save_steps 200 \
   --logging_steps 20 \
   --warmup_steps 500 \
   --eval_split "dev" \

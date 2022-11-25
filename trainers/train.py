@@ -162,6 +162,7 @@ def train(args, train_dataset, model, tokenizer):
     global_step = 0
     epochs_trained = 0
     steps_trained_in_current_epoch = 0
+    max_pairwise_acc = 0
 
     # Check if continuing training from a checkpoint
     if (os.path.exists(args.model_name_or_path)
@@ -320,6 +321,32 @@ def train(args, train_dataset, model, tokenizer):
                     # directory such as `checkpoint-best`, the saved weights
                     # will be overwritten each time your model reaches a best
                     # thus far evaluation results on the dev set.
+                    # if args.task_name == "com2sense":
+                    #     results = evaluate(args, model, tokenizer,
+                    #                        data_split=args.eval_split)
+                    #     eval_pairwise_acc = results["{}_pairwise_accuracy".format(args.task_name)]
+                    #     if eval_pairwise_acc > max_pairwise_acc:
+                    #         max_pairwise_acc = eval_pairwise_acc
+                    #         output_dir = os.path.join(args.output_dir,
+                    #             "checkpoint-best")
+                    #         if not os.path.exists(output_dir):
+                    #             os.makedirs(output_dir)
+                    #         model_to_save = (
+                    #             model.module if hasattr(model, "module") else model
+                    #         )  # Take care of distributed/parallel training
+                    #         model_to_save.save_pretrained(output_dir)
+                    #         tokenizer.save_pretrained(output_dir)
+
+                    #         torch.save(args, os.path.join(output_dir,
+                    #                 "training_args.bin"))
+                    #         logger.info("Saving model checkpoint to %s", output_dir)
+
+                    #         torch.save(optimizer.state_dict(), os.path.join(
+                    #             output_dir, "optimizer.pt"))
+                    #         torch.save(scheduler.state_dict(), os.path.join(
+                    #             output_dir, "scheduler.pt"))
+                    #         logger.info("Saving optimizer and scheduler states to %s",
+                    #                     output_dir)
 
             if args.max_steps > 0 and global_step > args.max_steps:
                 epoch_iterator.close()
