@@ -431,11 +431,16 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
                     input_ids=inputs['input_ids'],
                     labels=inputs['labels']
                 )
-            else:
+            elif args.eval_split != "test":
                 output = model(
                     input_ids=inputs['input_ids'],
                     attention_mask=inputs['attention_mask'],
                     labels=inputs['labels']
+                )
+            else:
+                output = model(
+                    input_ids=inputs['input_ids'],
+                    attention_mask=inputs['attention_mask']
                 )
 
             # TODO: See the HuggingFace transformers doc to properly get the loss
