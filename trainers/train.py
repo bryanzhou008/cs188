@@ -451,7 +451,8 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             loss = output.loss
             logits = output.logits
             
-            eval_loss += loss.mean()
+            if args.eval_split != "test":
+                eval_loss += loss.mean()
 
             # TODO: Handles the logits with Softmax properly.
             # logits = output.logits
