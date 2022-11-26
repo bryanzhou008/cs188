@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="outputs/semeval/debertav3large/checkpoint-best" 
+MODEL_TYPE="outputs/com2sense/semevalckpt/checkpoint-best" 
 SUBDIR="semevalckpt" 
 python3 -m trainers.train \
   --model_name_or_path "${MODEL_TYPE}" \
@@ -10,7 +10,7 @@ python3 -m trainers.train \
   --per_gpu_train_batch_size 6 \
   --per_gpu_eval_batch_size 1 \
   --gradient_accumulation_steps 8 \
-  --max_steps 2000 \
+  --max_steps 2400 \
   --max_seq_length 128 \
   --learning_rate 9e-6 \
   --adam_epsilon 1e-6 \
