@@ -1,6 +1,6 @@
 TASK_NAME="com2sense"
 DATA_DIR="datasets/com2sense"
-MODEL_TYPE="outputs/com2sense/semevalckpt/checkpoint-best" 
+MODEL_TYPE="outputs/com2sense/semevalckpt/checkpoint-1200" 
 SUBDIR="semevalckpt" 
 python3 -m trainers.train \
   --model_name_or_path "${MODEL_TYPE}" \
