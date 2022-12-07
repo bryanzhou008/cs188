@@ -10,7 +10,7 @@ python3 -m trainers.train \
   --per_gpu_train_batch_size 6 \
   --per_gpu_eval_batch_size 1 \
   --gradient_accumulation_steps 8 \
-  --max_steps 2400 \
+  --max_steps 1600 \
   --max_seq_length 128 \
   --learning_rate 9e-6 \
   --adam_epsilon 1e-6 \
