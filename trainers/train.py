@@ -551,7 +551,13 @@ def evaluate(args, model, tokenizer, prefix="", data_split="test"):
             pred_fo.write(str(pred)+"\n")
         pred_fo.close()
         logging.info("Saving prediction file to: {}".format(pred_file))
-
+    else:
+        pred_file = os.path.join(args.output_dir, "com2sense_dev_predictions.txt")
+        pred_fo = open(pred_file, "w")
+        for pred in preds:
+            pred_fo.write(str(pred)+"\n")
+        pred_fo.close()
+        logging.info("Saving prediction file to: {}".format(pred_file))
     return results
 
 
